@@ -240,7 +240,24 @@ function moveGhost(ghost) {
             // re-add class names of ghost.className and 'ghost' to the ghosts to new position
             squares[ghost.currentIndex].classList.add(ghost.className, 'ghost')
         }
+        checkForGameOver()
     }, ghost.speed)
 }
 
-// clearInterval(ghost.timerId)
+// check for game over
+function checkForGameOver() {
+    // if pacman contains ghost &&
+    // the square does NOT contain a scared ghost
+    if (
+        squares[pacmanCurrentIndex].classList.contains('ghost') &&
+        !squares[pacmanCurrentIndex].classList.contains('scared-ghost')
+    ) {
+        // for each ghost, set it to stop moving
+        ghosts.forEach((ghost) => clearInterval(ghost.timerId))
+
+        // remove event listener from our control function
+        document.removeEventListener('keyup', control)
+        // tell user game is over
+        scoreDisplay.textContent = 'You lose!'
+    }
+}
