@@ -160,14 +160,14 @@ function powerPelletEaten() {
         scoreDisplay.textContent = score
         console.log(score)
         // change each of the four ghosts to isScared
-        ghosts.forEach((ghost) => (ghost.isScared = true))
+        ghosts.forEach(ghost => (ghost.isScared = true))
         // use setTimeout to unscare ghosts after 10 seconds
         setTimeout(unscareGhost, 10000)
     }
 }
 
 function unscareGhost() {
-    ghosts.forEach((ghost) => (ghost.isScared = false))
+    ghosts.forEach(ghost => (ghost.isScared = false))
 }
 
 const ghosts = [
@@ -178,13 +178,13 @@ const ghosts = [
 ]
 
 // add ghost to UI
-ghosts.forEach((ghost) => {
+ghosts.forEach(ghost => {
     squares[ghost.currentIndex].classList.add(ghost.className)
     squares[ghost.currentIndex].classList.add('ghost')
 })
 
 // move the ghost
-ghosts.forEach((ghost) => moveGhost(ghost))
+ghosts.forEach(ghost => moveGhost(ghost))
 
 function moveGhost(ghost) {
     console.log('moved ghost')
@@ -253,7 +253,7 @@ function checkForGameOver() {
         !squares[pacmanCurrentIndex].classList.contains('scared-ghost')
     ) {
         // for each ghost, set it to stop moving
-        ghosts.forEach((ghost) => clearInterval(ghost.timerId))
+        ghosts.forEach(ghost => clearInterval(ghost.timerId))
 
         // remove event listener from our control function
         document.removeEventListener('keyup', control)
