@@ -141,6 +141,9 @@ class Ghost {
         this.className = className
         this.startIndex = startIndex
         this.speed = speed
+        this.currentIndex = startIndex
+        this.isScared = false
+        this.timerId = NaN
     }
 }
 
@@ -151,6 +154,39 @@ const ghosts = [
     new Ghost('clyde', 379, 500),
 ]
 
-ghosts.forEach((ghost) =>
+// add ghost to UI
+ghosts.forEach((ghost) => {
     squares[ghost.startIndex].classList.add(ghost.className)
-)
+    squares[ghost.startIndex].classList.add('ghost')
+})
+
+// move the ghost
+ghosts.forEach((ghost) => moveGhost(ghost))
+
+function moveGhost(ghost) {
+    console.log('moved ghost')
+    const directions = [-1, +1, -width, +width]
+    let direction = directions[Math.floor(Math.random() * directions.length)]
+
+    ghost.timerId = setInterval(() => {
+        // if the next square does NOT contain a wall
+        // and does NOT contain a ghost, execute code
+        if (
+            !squares[ghost.currentIndex + direction].classList.contains(
+                'wall'
+            ) &&
+            !squares[ghost.currentIndex + direction].classList.contains('ghost')
+        ) {
+            // remove any ghost class
+            squares[ghost.currentIndex].classList.remove(ghost.className)
+            // add new direction to currentIndex
+            ghost.currentIndex += direction
+            // add ghost class
+            squares[ghost.currentIndex].classList.add(ghost.className)
+        } else
+            direction =
+                directions[Math.floor(Math.random() * directions.length)]
+    }, ghost.speed)
+}
+
+// clearInterval(ghost.timerId)
