@@ -127,7 +127,7 @@ function control(e) {
     powerPelletEaten()
 }
 
-document.addEventListener('keydown', control)
+document.addEventListener('keyup', control)
 
 function pacDotEaten() {
     if (squares[pacmanCurrentIndex].classList.contains('pac-dot')) {
@@ -219,6 +219,26 @@ function moveGhost(ghost) {
         // if ghost is currently scared
         if (ghost.isScared) {
             squares[ghost.currentIndex].classList.add('scared-ghost')
+        }
+
+        // if ghost is scared AND pacman is on it
+        if (
+            ghost.isScared &&
+            squares[ghost.currentIndex].classList.contains('pacman')
+        ) {
+            // remove class names: ghost.className, 'ghost', 'scared-ghost'
+            squares[ghost.currentIndex].classList.remove(
+                ghost.className,
+                'ghost',
+                'scared-ghost'
+            )
+            // change ghosts currentIndex to starting index
+            ghost.currentIndex = ghost.startIndex
+            // add a score of 100
+            score += 100
+            scoreDisplay = score.textContent = score
+            // re-add class names of ghost.className and 'ghost' to the ghosts to new position
+            squares[ghost.currentIndex].classList.add(ghost.className, 'ghost')
         }
     }, ghost.speed)
 }
