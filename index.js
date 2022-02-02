@@ -124,6 +124,7 @@ function control(e) {
     }
     squares[pacmanCurrentIndex].classList.add('pacman')
     pacDotEaten()
+    powerPelletEaten()
 }
 
 document.addEventListener('keydown', control)
@@ -147,6 +148,28 @@ class Ghost {
     }
 }
 
+function powerPelletEaten() {
+    // if pacman is in contains a power pellet
+    if (squares[pacmanCurrentIndex].classList.contains('power-pellet')) {
+        // remove power pellet
+        squares[pacmanCurrentIndex].classList.remove('power-pellet')
+
+        // add score of 10
+        score += 10
+
+        scoreDisplay.textContent = score
+        console.log(score)
+        // change each of the four ghosts to isScared
+        ghosts.forEach((ghost) => (ghost.isScared = true))
+        // use setTimeout to unscare ghosts after 10 seconds
+        setTimeout(unscareGhost, 10000)
+    }
+}
+
+function unscareGhost() {
+    ghosts.forEach((ghost) => (ghost.isScared = false))
+}
+
 const ghosts = [
     new Ghost('blinky', 348, 250),
     new Ghost('pinky', 376, 400),
@@ -156,8 +179,8 @@ const ghosts = [
 
 // add ghost to UI
 ghosts.forEach((ghost) => {
-    squares[ghost.startIndex].classList.add(ghost.className)
-    squares[ghost.startIndex].classList.add('ghost')
+    squares[ghost.currentIndex].classList.add(ghost.className)
+    squares[ghost.currentIndex].classList.add('ghost')
 })
 
 // move the ghost
@@ -179,13 +202,24 @@ function moveGhost(ghost) {
         ) {
             // remove any ghost class
             squares[ghost.currentIndex].classList.remove(ghost.className)
+            squares[ghost.currentIndex].classList.remove(
+                'ghost',
+                'scared-ghost'
+            )
+
             // add new direction to currentIndex
             ghost.currentIndex += direction
             // add ghost class
             squares[ghost.currentIndex].classList.add(ghost.className)
+            squares[ghost.currentIndex].classList.add('ghost')
         } else
             direction =
                 directions[Math.floor(Math.random() * directions.length)]
+
+        // if ghost is currently scared
+        if (ghost.isScared) {
+            squares[ghost.currentIndex].classList.add('scared-ghost')
+        }
     }, ghost.speed)
 }
 
